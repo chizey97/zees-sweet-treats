@@ -16,9 +16,7 @@
       --text:#231f20;
       --muted:#6b5f65;
       --brand:#5b2b82;
-      --brand2:#8a4ac6;
       --accent:#c8a24a;
-      --accent2:#f3b6c9;
       --line: rgba(35,31,32,0.10);
       --shadow: 0 18px 55px rgba(0,0,0,0.12);
       --radius: 26px;
@@ -38,7 +36,6 @@
       overflow:hidden;
     }
 
-    /* soft sparkle drift */
     .sparkles::before,
     .sparkles::after{
       content:"";
@@ -89,7 +86,7 @@
       position:absolute;
       width:560px;height:560px;
       right:-260px;top:-300px;
-      background: radial-gradient(circle at 30% 30%, rgba(138,74,198,0.30), transparent 60%);
+      background: radial-gradient(circle at 30% 30%, rgba(91,43,130,0.30), transparent 60%);
       filter: blur(6px);
     }
     .card::after{
@@ -156,7 +153,7 @@
       border:1px solid rgba(91,43,130,0.20);
       background: rgba(255,255,255,0.75);
       color:var(--brand);
-      font-weight:800;
+      font-weight:900;
     }
 
     .grid{
@@ -257,12 +254,12 @@
         <div class="logo"><img src="logo.png" alt="Zee’s Sweet Treats logo"></div>
         <div>
           <h1>Order Confirmed ✨</h1>
-          <p class="sub">Your request has been received — thank you for choosing Zee’s Sweet Treats.</p>
+          <p class="sub">Thank you! Your order has been received — we’ll confirm shortly.</p>
         </div>
       </div>
 
       <section class="confetti">
-        <div class="stamp">✅ Received • We’ll confirm shortly</div>
+        <div class="stamp">✅ Received • Confirmation in progress</div>
 
         <div class="grid">
           <div class="box">
@@ -275,14 +272,13 @@
           <div class="box">
             <p class="boxTitle">Want faster confirmation?</p>
             <p class="boxText">
-              Feel free to call or message Zee to confirm right away — especially for same-day or urgent orders.
+              You can WhatsApp Zee now and your order will be confirmed quicker — especially for urgent orders.
             </p>
           </div>
         </div>
 
         <div class="actions">
-          <!-- EDIT THIS LINK: put your WhatsApp/phone link -->
-          <a class="btn" id="callBtn" href="#">Call / WhatsApp Zee →</a>
+          <a class="btn" id="waBtn" href="#" target="_blank" rel="noopener">WhatsApp Zee →</a>
           <a class="btn btn2" href="order.html">Place another order</a>
         </div>
 
@@ -295,32 +291,21 @@
   </div>
 
 <script>
-  // OPTIONAL (recommended): set your WhatsApp link here
-  // Example for Zambia: https://wa.me/26097XXXXXXX?text=Hi%20Zee!%20I%20just%20placed%20an%20order%20(%23REF)%20and%20wanted%20to%20confirm.
-  const WHATSAPP_LINK = "https://wa.me/"; // <-- replace with your full link
+  // WhatsApp number (Zambia): 260 + number without leading 0
+  const WA_NUMBER = "260974451250";
 
-  // show order ref if we saved it
   const ref = localStorage.getItem("ZEE_LAST_ORDER_REF") || "";
+  const refEl = document.getElementById("ref");
+
   if(ref){
-    document.getElementById("ref").textContent = ref;
+    refEl.textContent = ref;
   }else{
-    // generate a cute fallback reference for display only
-    const fallback = "ZEE-" + Math.random().toString(16).slice(2,8).toUpperCase();
-    document.getElementById("ref").textContent = fallback;
+    refEl.textContent = "ZEE-" + Math.random().toString(16).slice(2,8).toUpperCase();
   }
 
-  // build WhatsApp link with ref
-  const finalRef = document.getElementById("ref").textContent;
+  const finalRef = refEl.textContent;
   const msg = encodeURIComponent(`Hi Zee! I just placed an order (${finalRef}) and I wanted to confirm. 😊`);
-  const callBtn = document.getElementById("callBtn");
-
-  if(WHATSAPP_LINK && WHATSAPP_LINK !== "https://wa.me/"){
-    callBtn.href = WHATSAPP_LINK + (WHATSAPP_LINK.includes("?") ? "" : "?") + (WHATSAPP_LINK.includes("?") ? "&" : "") + "text=" + msg;
-  }else{
-    // If you haven't set WhatsApp link yet, keep button useful:
-    callBtn.href = "order.html";
-    callBtn.textContent = "Back to Order Page →";
-  }
+  document.getElementById("waBtn").href = `https://wa.me/${WA_NUMBER}?text=${msg}`;
 </script>
 </body>
 </html>
