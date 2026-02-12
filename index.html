@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zee’s Sweet Treats</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#fff7fb;
+      --card: rgba(255,255,255,0.92);
+      --text:#231f20;
+      --muted:#6b5f65;
+      --accent:#b08d57;
+      --line: rgba(35,31,32,0.10);
+      --shadow: 0 18px 50px rgba(0,0,0,0.12);
+      --radius: 22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:Poppins, system-ui, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255,255,255,0.9) 0 18%, transparent 19%),
+        radial-gradient(circle at 80% 30%, rgba(255,255,255,0.7) 0 14%, transparent 15%),
+        linear-gradient(135deg, #ffe9f1, var(--bg));
+      padding: 22px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .card{
+      width:min(900px, 100%);
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:26px;
+      backdrop-filter: blur(6px);
+      text-align:center;
+    }
+    h1{
+      margin:0 0 6px;
+      font-family:"Cormorant Garamond", serif;
+      font-size:46px;
+      letter-spacing:.3px;
+    }
+    p{margin:0 0 18px; color:var(--muted); line-height:1.6;}
+    a{
+      display:inline-block;
+      padding:14px 18px;
+      border-radius:16px;
+      text-decoration:none;
+      font-weight:700;
+      color:white;
+      background: linear-gradient(135deg, var(--accent), #d7b477);
+      box-shadow: 0 16px 30px rgba(176,141,87,0.25);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Zee’s Sweet Treats</h1>
+    <p>Elegant, made-to-order desserts ✨</p>
+    <a href="order.html">Place an Order</a>
+  </div>
+</body>
+</html>
