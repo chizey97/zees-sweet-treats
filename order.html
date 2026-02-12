@@ -448,22 +448,19 @@
     btn.textContent = "Placing Order…";
 
     try{
-      const res = await fetch(SCRIPT_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payload)
-      });
+      await fetch(SCRIPT_URL, {
+  method: "POST",
+  mode: "no-cors",
+  headers: { "Content-Type": "text/plain;charset=utf-8" },
+  body: JSON.stringify(payload)
+});
 
-      const out = await res.json().catch(() => null);
+showToast(true, "Order sent ✅ Please check confirmation.");
+qtyInputs.forEach(i => i.value = 0);
+document.getElementById("notes").value = "";
+document.getElementById("deliveryLocation").value = "";
+refreshTotals();
 
-      if(out && out.status === "success"){
-        showToast(true, "Order received ✅ Thank you!");
-        qtyInputs.forEach(i => i.value = 0);
-        document.getElementById("notes").value = "";
-        document.getElementById("deliveryLocation").value = "";
-        refreshTotals();
-      }else{
-        showToast(false, "Order failed. Please try again.");
       }
     }catch(e){
       showToast(false, "Could not send order. Check internet and try again.");
