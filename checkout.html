@@ -60,10 +60,7 @@
       backdrop-filter: blur(8px);
     }
 
-    .topnav{
-      display:flex; justify-content:space-between; align-items:center;
-      gap:12px; margin-bottom:12px; flex-wrap:wrap;
-    }
+    .topnav{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; flex-wrap:wrap;}
     .back{
       text-decoration:none;
       color:var(--muted);
@@ -197,7 +194,6 @@
 <body>
 
   <div class="wrap">
-    <!-- LEFT: Details -->
     <div class="card">
       <div class="topnav">
         <a class="back" href="order.html">← Back</a>
@@ -286,7 +282,6 @@
       <div class="hint">By placing an order, you agree that Zee will contact you to confirm details.</div>
     </div>
 
-    <!-- RIGHT: Summary -->
     <div class="card">
       <div class="sectionTitle">Order Summary</div>
       <div class="rowBox" id="summaryBox"></div>
@@ -304,12 +299,9 @@
   </div>
 
 <script>
-  // ✅ Your Apps Script URL (same as before)
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlyFJEuedE-v-Iyqp6TlIHDBNHkbfrSY-0Co1w9V92a4PEffClOtqPQesutX9csMMk/exec";
-
   const money = (n) => "K" + Number(n || 0).toFixed(0);
 
-  // Load cart from order page
   const raw = localStorage.getItem("ZEE_ORDER_CART");
   const cart = raw ? JSON.parse(raw) : null;
 
@@ -340,7 +332,6 @@
   }
   showSummary();
 
-  // Payment UI toggle
   const paymentMethodEl = document.getElementById("paymentMethod");
   const mmFields = document.getElementById("mmFields");
   const cashHint = document.getElementById("cashHint");
@@ -359,6 +350,11 @@
     toast.style.display = "block";
     toast.className = "toast " + (ok ? "ok" : "err");
     toast.textContent = msg;
+  }
+
+  function makeRef(){
+    // nice human-ish ref
+    return "ZEE-" + Math.random().toString(16).slice(2,10).toUpperCase();
   }
 
   document.getElementById("placeOrderBtn").addEventListener("click", async () => {
@@ -386,7 +382,10 @@
       return;
     }
 
+    const orderId = makeRef();
+
     const payload = {
+      orderId,
       name,
       phone,
       deliveryType,
@@ -413,15 +412,12 @@
         body: JSON.stringify(payload)
       });
 
-      showToast(true, "Order received ✅ Zee will contact you to confirm.");
+      // Save ref for success page + clear cart
+      localStorage.setItem("ZEE_LAST_ORDER_REF", orderId);
       localStorage.removeItem("ZEE_ORDER_CART");
 
-      // optional: clear fields
-      document.getElementById("custName").value = "";
-      document.getElementById("custPhone").value = "";
-      document.getElementById("deliveryLocation").value = "";
-      document.getElementById("notes").value = "";
-      document.getElementById("mmRef").value = "";
+      // Redirect to creative confirmation page
+      window.location.href = "success.html";
 
     }catch(e){
       showToast(false, "Could not send order. Please try again.");
