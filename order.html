@@ -179,6 +179,7 @@
     .topnav{
       display:flex; justify-content:space-between; align-items:center;
       gap:12px; margin-bottom:12px;
+      flex-wrap:wrap;
     }
     .back{
       text-decoration:none;
@@ -190,6 +191,31 @@
       background: rgba(255,255,255,0.75);
       display:inline-flex; align-items:center; gap:8px;
     }
+
+    .cartBox{
+      margin-top:12px;
+      border:1px solid rgba(35,31,32,0.08);
+      background: rgba(255,255,255,0.70);
+      border-radius:16px;
+      padding:10px 12px;
+    }
+    .cartTitle{
+      font-weight:700;
+      color:var(--text);
+      margin:0 0 8px;
+      font-size:14px;
+    }
+    .cartLine{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      padding:6px 0;
+      border-bottom:1px solid rgba(35,31,32,0.06);
+      color:var(--muted);
+      font-size:13.5px;
+    }
+    .cartLine:last-child{border-bottom:none}
+    .cartEmpty{color:var(--muted); font-size:13.5px; padding:6px 0;}
   </style>
 </head>
 <body>
@@ -266,7 +292,7 @@
       </div></div>
 
       <div class="note">
-        Prices can be changed anytime (I can help you refine the menu later).
+        Prices can be changed anytime.
       </div>
     </div>
 
@@ -302,6 +328,11 @@
         <textarea id="notes" placeholder="Any special instructions?"></textarea>
       </div>
 
+      <div class="cartBox">
+        <div class="cartTitle">Your items</div>
+        <div id="cartList"></div>
+      </div>
+
       <div style="margin-top:16px">
         <div class="summaryLine"><span>Subtotal</span><strong id="subtotal">K0</strong></div>
         <div class="summaryLine"><span>Delivery Fee</span><strong id="deliveryFee">K0</strong></div>
@@ -318,10 +349,10 @@
   </div>
 
 <script>
-  // ✅ PASTE YOUR APPS SCRIPT WEB APP URL HERE:
+  // ✅ Your Apps Script URL
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlyFJEuedE-v-Iyqp6TlIHDBNHkbfrSY-0Co1w9V92a4PEffClOtqPQesutX9csMMk/exec";
 
-  // ✅ Edit these prices to your real prices
+  // ✅ Prices
   const PRICES = {
     brownies: 25,
     cup_vanilla: 12,
@@ -348,6 +379,7 @@
 
   const money = (n) => "K" + Number(n || 0).toFixed(0);
 
+  // Fill price labels on load
   document.querySelectorAll("[data-price-label]").forEach(el => {
     const sku = el.getAttribute("data-price-label");
     el.textContent = money(PRICES[sku]) + " each";
@@ -359,52 +391,71 @@
   const deliveryFeeEl = document.getElementById("deliveryFee");
   const totalEl = document.getElementById("total");
   const toast = document.getElementById("toast");
+  const cartList = document.getElementById("cartList");
 
-  function calcSubtotal(){
-    let subtotal = 0;
-    qtyInputs.forEach(inp => {
-      const sku = inp.dataset.sku;
-      const qty = Math.max(0, parseInt(inp.value || "0", 10));
-      subtotal += qty * (PRICES[sku] || 0);
-    });
-    return subtotal;
+  function safeQty(v){
+    const n = parseInt(v, 10);
+    return Number.isFinite(n) && n > 0 ? n : 0;
   }
-
-  function calcDeliveryFee(){
-    if (deliveryTypeEl.value === "Delivery") return 25; // change delivery fee anytime
-    return 0;
-  }
-
-  function refreshTotals(){
-    const sub = calcSubtotal();
-    const del = calcDeliveryFee();
-    subtotalEl.textContent = money(sub);
-    deliveryFeeEl.textContent = money(del);
-    totalEl.textContent = money(sub + del);
-  }
-
-  qtyInputs.forEach(i => i.addEventListener("input", refreshTotals));
-  deliveryTypeEl.addEventListener("change", refreshTotals);
-  refreshTotals();
 
   function buildItems(){
     const items = [];
     qtyInputs.forEach(inp => {
       const sku = inp.dataset.sku;
-      const qty = Math.max(0, parseInt(inp.value || "0", 10));
+      const qty = safeQty(inp.value);
       if(qty > 0){
-        const price = PRICES[sku] || 0;
+        const unitPrice = PRICES[sku] || 0;
         items.push({
           sku,
           name: ITEM_NAMES[sku] || sku,
           qty,
-          unitPrice: price,
-          lineTotal: qty * price
+          unitPrice,
+          lineTotal: qty * unitPrice
         });
       }
     });
     return items;
   }
+
+  function calcSubtotal(items){
+    return items.reduce((sum, it) => sum + it.lineTotal, 0);
+  }
+
+  function calcDeliveryFee(){
+    return (deliveryTypeEl.value === "Delivery") ? 25 : 0;
+  }
+
+  function renderCart(items){
+    if(items.length === 0){
+      cartList.innerHTML = `<div class="cartEmpty">No items yet — select quantities on the left.</div>`;
+      return;
+    }
+    cartList.innerHTML = items.map(it => `
+      <div class="cartLine">
+        <span>${it.qty} × ${it.name}</span>
+        <strong style="color:var(--text)">${money(it.lineTotal)}</strong>
+      </div>
+    `).join("");
+  }
+
+  function refreshTotals(){
+    const items = buildItems();
+    const sub = calcSubtotal(items);
+    const del = calcDeliveryFee();
+    subtotalEl.textContent = money(sub);
+    deliveryFeeEl.textContent = money(del);
+    totalEl.textContent = money(sub + del);
+    renderCart(items);
+  }
+
+  // Strong listeners (works well on mobile)
+  qtyInputs.forEach(inp => {
+    ["input","change","keyup"].forEach(evt => inp.addEventListener(evt, refreshTotals));
+  });
+  ["input","change"].forEach(evt => deliveryTypeEl.addEventListener(evt, refreshTotals));
+
+  // Initial
+  refreshTotals();
 
   function showToast(ok, msg){
     toast.style.display = "block";
@@ -420,6 +471,7 @@
     const notes = document.getElementById("notes").value.trim();
 
     const items = buildItems();
+
     if(!name || !phone){
       showToast(false, "Please enter your name and phone number.");
       return;
@@ -432,12 +484,8 @@
       showToast(false, "Please enter a delivery location (or choose Pickup).");
       return;
     }
-    if(SCRIPT_URL.includes("PASTE_YOUR_WEB_APP_URL_HERE")){
-      showToast(false, "Admin setup: paste your Apps Script Web App URL into SCRIPT_URL.");
-      return;
-    }
 
-    const subtotal = calcSubtotal();
+    const subtotal = calcSubtotal(items);
     const deliveryFee = calcDeliveryFee();
     const total = subtotal + deliveryFee;
 
@@ -448,20 +496,20 @@
     btn.textContent = "Placing Order…";
 
     try{
+      // Using no-cors so it reliably sends from GitHub Pages
       await fetch(SCRIPT_URL, {
-  method: "POST",
-  mode: "no-cors",
-  headers: { "Content-Type": "text/plain;charset=utf-8" },
-  body: JSON.stringify(payload)
-});
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
 
-showToast(true, "Order sent ✅ Please check confirmation.");
-qtyInputs.forEach(i => i.value = 0);
-document.getElementById("notes").value = "";
-document.getElementById("deliveryLocation").value = "";
-refreshTotals();
+      showToast(true, "Order sent ✅ Please check your Google Sheet.");
+      qtyInputs.forEach(i => i.value = 0);
+      document.getElementById("notes").value = "";
+      document.getElementById("deliveryLocation").value = "";
+      refreshTotals();
 
-      }
     }catch(e){
       showToast(false, "Could not send order. Check internet and try again.");
     }finally{
