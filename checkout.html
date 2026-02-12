@@ -16,9 +16,7 @@
       --text:#231f20;
       --muted:#6b5f65;
       --brand:#5b2b82;
-      --brand2:#8a4ac6;
       --accent:#c8a24a;
-      --accent2:#f3b6c9;
       --line: rgba(35,31,32,0.10);
       --shadow: 0 18px 55px rgba(0,0,0,0.12);
       --radius: 26px;
@@ -36,7 +34,6 @@
         linear-gradient(135deg, #fff0f7, var(--bg));
       padding:22px;
     }
-
     .wrap{
       width:min(980px, 100%);
       margin:0 auto;
@@ -187,13 +184,43 @@
       background: rgba(255,255,255,0.65);
       color:var(--muted);
       font-size:12.5px;
-      line-height:1.5;
+      line-height:1.55;
+    }
+    .payNumbers{
+      margin-top:10px;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(35,31,32,0.10);
+      background: rgba(255,255,255,0.70);
+      color:var(--text);
+      font-size:13px;
+      line-height:1.55;
+    }
+    .payNumbers b{color:var(--brand)}
+    .copyRow{
+      display:flex; gap:8px; align-items:center; justify-content:space-between;
+      margin-top:8px;
+      padding:10px 10px;
+      border-radius:12px;
+      border:1px solid rgba(35,31,32,0.08);
+      background: rgba(255,255,255,0.70);
+    }
+    .copyRow .num{font-weight:900; letter-spacing:.4px}
+    .copyBtn{
+      border:none;
+      border-radius:12px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:900;
+      color:white;
+      background: linear-gradient(135deg, var(--brand), var(--accent));
     }
   </style>
 </head>
 <body>
 
   <div class="wrap">
+    <!-- LEFT -->
     <div class="card">
       <div class="topnav">
         <a class="back" href="order.html">← Back</a>
@@ -257,7 +284,6 @@
               <select id="mmProvider">
                 <option value="Airtel Money">Airtel Money</option>
                 <option value="MTN MoMo">MTN MoMo</option>
-                <option value="Zamtel Kwacha">Zamtel Kwacha</option>
               </select>
             </div>
             <div>
@@ -266,8 +292,25 @@
             </div>
           </div>
 
+          <div class="payNumbers">
+            <b>Send Mobile Money to:</b>
+            <div class="copyRow">
+              <div>
+                Airtel Money: <span class="num" id="airtelNum">0974451250</span>
+              </div>
+              <button class="copyBtn" type="button" data-copy="0974451250">Copy</button>
+            </div>
+            <div class="copyRow">
+              <div>
+                MTN MoMo: <span class="num" id="mtnNum">0963539378</span>
+              </div>
+              <button class="copyBtn" type="button" data-copy="0963539378">Copy</button>
+            </div>
+          </div>
+
           <div class="payHint">
-            After placing the order, Zee will confirm the total and payment details with you.
+            Tip: Place your order first, then Zee will confirm your total and order details.
+            If you already paid, add your transaction reference above.
           </div>
         </div>
 
@@ -282,6 +325,7 @@
       <div class="hint">By placing an order, you agree that Zee will contact you to confirm details.</div>
     </div>
 
+    <!-- RIGHT -->
     <div class="card">
       <div class="sectionTitle">Order Summary</div>
       <div class="rowBox" id="summaryBox"></div>
@@ -345,6 +389,21 @@
   paymentMethodEl.addEventListener("change", updatePaymentUI);
   updatePaymentUI();
 
+  // Copy buttons
+  document.querySelectorAll(".copyBtn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const num = btn.getAttribute("data-copy");
+      try{
+        await navigator.clipboard.writeText(num);
+        btn.textContent = "Copied!";
+        setTimeout(()=> btn.textContent = "Copy", 900);
+      }catch(e){
+        // fallback
+        alert("Copy this number: " + num);
+      }
+    });
+  });
+
   function showToast(ok, msg){
     const toast = document.getElementById("toast");
     toast.style.display = "block";
@@ -353,7 +412,6 @@
   }
 
   function makeRef(){
-    // nice human-ish ref
     return "ZEE-" + Math.random().toString(16).slice(2,10).toUpperCase();
   }
 
@@ -412,11 +470,9 @@
         body: JSON.stringify(payload)
       });
 
-      // Save ref for success page + clear cart
       localStorage.setItem("ZEE_LAST_ORDER_REF", orderId);
       localStorage.removeItem("ZEE_ORDER_CART");
 
-      // Redirect to creative confirmation page
       window.location.href = "success.html";
 
     }catch(e){
