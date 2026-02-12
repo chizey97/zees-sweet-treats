@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zee’s Sweet Treats — Order</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#fff7fb;
+      --card: rgba(255,255,255,0.92);
+      --text:#231f20;
+      --muted:#6b5f65;
+      --accent:#b08d57;   /* champagne gold */
+      --accent2:#f6c2d1;  /* soft blush */
+      --line: rgba(35,31,32,0.10);
+      --shadow: 0 18px 50px rgba(0,0,0,0.12);
+      --radius: 22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:Poppins, system-ui, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255,255,255,0.9) 0 18%, transparent 19%),
+        radial-gradient(circle at 80% 30%, rgba(255,255,255,0.7) 0 14%, transparent 15%),
+        linear-gradient(135deg, #ffe9f1, var(--bg));
+      padding: 22px;
+    }
+    .wrap{
+      width:min(1100px, 100%);
+      margin:0 auto;
+      display:grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap:18px;
+      align-items:start;
+    }
+    @media (max-width: 900px){
+      .wrap{grid-template-columns: 1fr;}
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:20px;
+      backdrop-filter: blur(6px);
+    }
+
+    .brand{
+      display:flex; gap:14px; align-items:center; margin-bottom:10px;
+    }
+    .logo{
+      width:54px; height:54px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      display:flex; align-items:center; justify-content:center;
+      background: linear-gradient(135deg, rgba(176,141,87,0.15), rgba(246,194,209,0.22));
+      font-weight:700;
+      color:var(--accent);
+    }
+    h1{
+      margin:0;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 40px;
+      letter-spacing: 0.3px;
+    }
+    .subtitle{margin:2px 0 0; color:var(--muted); font-size:13.5px}
+    .sectionTitle{
+      margin:16px 0 8px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 26px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 110px 120px;
+      gap:10px;
+      align-items:center;
+    }
+    .row{
+      padding:12px 12px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,0.75);
+      margin-bottom:10px;
+    }
+    .itemName{font-weight:600}
+    .itemDesc{color:var(--muted); font-size:12.5px; margin-top:2px}
+    .price{color:var(--muted); text-align:right}
+    input[type="number"]{
+      width:110px;
+      padding:10px 10px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      font-size:14px;
+      outline:none;
+      text-align:center;
+      background:white;
+    }
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,0.75);
+      font-size:12.5px;
+      color:var(--muted);
+    }
+    select, textarea, input[type="text"], input[type="tel"]{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:white;
+      font-size:14px;
+      outline:none;
+    }
+    textarea{min-height:90px; resize:vertical}
+    .two{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width: 650px){ .two{grid-template-columns:1fr;} }
+
+    .summaryLine{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:10px 0;
+      border-bottom:1px solid rgba(35,31,32,0.06);
+      color:var(--muted);
+      font-size:14px;
+    }
+    .summaryLine strong{color:var(--text)}
+    .total{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:14px 0 0;
+      font-size:16px;
+    }
+    .total strong{font-size:20px; color:var(--text)}
+    .btn{
+      width:100%;
+      margin-top:14px;
+      padding:14px 14px;
+      border:none;
+      border-radius:16px;
+      cursor:pointer;
+      font-weight:700;
+      color:white;
+      background: linear-gradient(135deg, var(--accent), #d7b477);
+      box-shadow: 0 16px 30px rgba(176,141,87,0.25);
+      transition: transform .12s ease;
+    }
+    .btn:active{transform: translateY(1px)}
+    .note{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12.5px;
+      line-height:1.5;
+    }
+    .toast{
+      display:none;
+      margin-top:12px;
+      padding:12px 12px;
+      border-radius:16px;
+      border:1px solid rgba(0,0,0,0.08);
+      background: rgba(255,255,255,0.85);
+      color:var(--text);
+    }
+    .ok{border-color: rgba(0,160,90,0.22)}
+    .err{border-color: rgba(200,0,60,0.22)}
+    .topnav{
+      display:flex; justify-content:space-between; align-items:center;
+      gap:12px; margin-bottom:12px;
+    }
+    .back{
+      text-decoration:none;
+      color:var(--muted);
+      font-weight:600;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,0.75);
+      display:inline-flex; align-items:center; gap:8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <div class="card">
+      <div class="topnav">
+        <a class="back" href="index.html">← Back</a>
+        <div class="pill">Set quantity to 0 for items you don’t want</div>
+      </div>
+
+      <div class="brand">
+        <div class="logo">Z</div>
+        <div>
+          <h1>Zee’s Sweet Treats</h1>
+          <div class="subtitle">Elegant, made-to-order desserts ✨</div>
+        </div>
+      </div>
+
+      <div class="sectionTitle">Chocolate Brownies</div>
+      <div class="row">
+        <div class="grid">
+          <div>
+            <div class="itemName">Chocolate Brownies</div>
+            <div class="itemDesc">Rich & fudgy</div>
+          </div>
+          <input type="number" min="0" value="0" data-sku="brownies" />
+          <div class="price" data-price-label="brownies"></div>
+        </div>
+      </div>
+
+      <div class="sectionTitle">Cupcakes</div>
+      <div class="row"><div class="grid">
+        <div><div class="itemName">Vanilla Cupcakes</div><div class="itemDesc">Classic vanilla</div></div>
+        <input type="number" min="0" value="0" data-sku="cup_vanilla" />
+        <div class="price" data-price-label="cup_vanilla"></div>
+      </div></div>
+      <div class="row"><div class="grid">
+        <div><div class="itemName">Chocolate Cupcakes</div><div class="itemDesc">Deep cocoa</div></div>
+        <input type="number" min="0" value="0" data-sku="cup_chocolate" />
+        <div class="price" data-price-label="cup_chocolate"></div>
+      </div></div>
+      <div class="row"><div class="grid">
+        <div><div class="itemName">Marble Cupcakes</div><div class="itemDesc">Vanilla + chocolate swirl</div></div>
+        <input type="number" min="0" value="0" data-sku="cup_marble" />
+        <div class="price" data-price-label="cup_marble"></div>
+      </div></div>
+      <div class="row"><div class="grid">
+        <div><div class="itemName">Blueberry Cupcakes</div><div class="itemDesc">Soft & fruity</div></div>
+        <input type="number" min="0" value="0" data-sku="cup_blueberry" />
+        <div class="price" data-price-label="cup_blueberry"></div>
+      </div></div>
+      <div class="row"><div class="grid">
+        <div><div class="itemName">Coffee Cupcakes</div><div class="itemDesc">Coffee-kissed sweetness</div></div>
+        <input type="number" min="0" value="0" data-sku="cup_coffee" />
+        <div class="price" data-price-label="cup_coffee"></div>
+      </div></div>
+
+      <div class="sectionTitle">Cakes</div>
+      <div class="row"><div class="grid">
+        <div><div class="itemName">Vanilla Cake</div><div class="itemDesc">Smooth, classic</div></div>
+        <input type="number" min="0" value="0" data-sku="cake_vanilla" />
+        <div class="price" data-price-label="cake_vanilla"></div>
+      </div></div>
+      <div class="row"><div class="grid">
+        <div><div class="itemName">Chocolate Cake</div><div class="itemDesc">Rich chocolate layers</div></div>
+        <input type="number" min="0" value="0" data-sku="cake_chocolate" />
+        <div class="price" data-price-label="cake_chocolate"></div>
+      </div></div>
+      <div class="row"><div class="grid">
+        <div><div class="itemName">Carrot Cake</div><div class="itemDesc">Spiced, moist, elegant</div></div>
+        <input type="number" min="0" value="0" data-sku="cake_carrot" />
+        <div class="price" data-price-label="cake_carrot"></div>
+      </div></div>
+
+      <div class="note">
+        Prices can be changed anytime (I can help you refine the menu later).
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sectionTitle">Checkout</div>
+
+      <div class="two">
+        <div>
+          <label>Full Name</label>
+          <input id="custName" type="text" placeholder="e.g., Jane Doe" />
+        </div>
+        <div>
+          <label>Phone</label>
+          <input id="custPhone" type="tel" placeholder="e.g., 097xxxxxxx" />
+        </div>
+      </div>
+
+      <div style="margin-top:10px">
+        <label>Delivery Type</label>
+        <select id="deliveryType">
+          <option value="Pickup">Pickup</option>
+          <option value="Delivery">Delivery</option>
+        </select>
+      </div>
+
+      <div style="margin-top:10px">
+        <label>Delivery Location (if Delivery)</label>
+        <input id="deliveryLocation" type="text" placeholder="Area / Address" />
+      </div>
+
+      <div style="margin-top:10px">
+        <label>Notes</label>
+        <textarea id="notes" placeholder="Any special instructions?"></textarea>
+      </div>
+
+      <div style="margin-top:16px">
+        <div class="summaryLine"><span>Subtotal</span><strong id="subtotal">K0</strong></div>
+        <div class="summaryLine"><span>Delivery Fee</span><strong id="deliveryFee">K0</strong></div>
+        <div class="total"><span>Total</span><strong id="total">K0</strong></div>
+      </div>
+
+      <button class="btn" id="placeOrderBtn">Place Order</button>
+      <div id="toast" class="toast"></div>
+
+      <div class="note">
+        Orders are automatically saved into your Google Sheet.
+      </div>
+    </div>
+  </div>
+
+<script>
+  // ✅ PASTE YOUR APPS SCRIPT WEB APP URL HERE:
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlyFJEuedE-v-Iyqp6TlIHDBNHkbfrSY-0Co1w9V92a4PEffClOtqPQesutX9csMMk/exec";
+
+  // ✅ Edit these prices to your real prices
+  const PRICES = {
+    brownies: 25,
+    cup_vanilla: 12,
+    cup_chocolate: 12,
+    cup_marble: 12,
+    cup_blueberry: 12,
+    cup_coffee: 12,
+    cake_vanilla: 180,
+    cake_chocolate: 200,
+    cake_carrot: 220
+  };
+
+  const ITEM_NAMES = {
+    brownies: "Chocolate Brownies",
+    cup_vanilla: "Vanilla Cupcakes",
+    cup_chocolate: "Chocolate Cupcakes",
+    cup_marble: "Marble Cupcakes",
+    cup_blueberry: "Blueberry Cupcakes",
+    cup_coffee: "Coffee Cupcakes",
+    cake_vanilla: "Vanilla Cake",
+    cake_chocolate: "Chocolate Cake",
+    cake_carrot: "Carrot Cake"
+  };
+
+  const money = (n) => "K" + Number(n || 0).toFixed(0);
+
+  document.querySelectorAll("[data-price-label]").forEach(el => {
+    const sku = el.getAttribute("data-price-label");
+    el.textContent = money(PRICES[sku]) + " each";
+  });
+
+  const qtyInputs = Array.from(document.querySelectorAll('input[type="number"][data-sku]'));
+  const deliveryTypeEl = document.getElementById("deliveryType");
+  const subtotalEl = document.getElementById("subtotal");
+  const deliveryFeeEl = document.getElementById("deliveryFee");
+  const totalEl = document.getElementById("total");
+  const toast = document.getElementById("toast");
+
+  function calcSubtotal(){
+    let subtotal = 0;
+    qtyInputs.forEach(inp => {
+      const sku = inp.dataset.sku;
+      const qty = Math.max(0, parseInt(inp.value || "0", 10));
+      subtotal += qty * (PRICES[sku] || 0);
+    });
+    return subtotal;
+  }
+
+  function calcDeliveryFee(){
+    if (deliveryTypeEl.value === "Delivery") return 25; // change delivery fee anytime
+    return 0;
+  }
+
+  function refreshTotals(){
+    const sub = calcSubtotal();
+    const del = calcDeliveryFee();
+    subtotalEl.textContent = money(sub);
+    deliveryFeeEl.textContent = money(del);
+    totalEl.textContent = money(sub + del);
+  }
+
+  qtyInputs.forEach(i => i.addEventListener("input", refreshTotals));
+  deliveryTypeEl.addEventListener("change", refreshTotals);
+  refreshTotals();
+
+  function buildItems(){
+    const items = [];
+    qtyInputs.forEach(inp => {
+      const sku = inp.dataset.sku;
+      const qty = Math.max(0, parseInt(inp.value || "0", 10));
+      if(qty > 0){
+        const price = PRICES[sku] || 0;
+        items.push({
+          sku,
+          name: ITEM_NAMES[sku] || sku,
+          qty,
+          unitPrice: price,
+          lineTotal: qty * price
+        });
+      }
+    });
+    return items;
+  }
+
+  function showToast(ok, msg){
+    toast.style.display = "block";
+    toast.className = "toast " + (ok ? "ok" : "err");
+    toast.textContent = msg;
+  }
+
+  document.getElementById("placeOrderBtn").addEventListener("click", async () => {
+    const name = document.getElementById("custName").value.trim();
+    const phone = document.getElementById("custPhone").value.trim();
+    const deliveryType = deliveryTypeEl.value;
+    const deliveryLocation = document.getElementById("deliveryLocation").value.trim();
+    const notes = document.getElementById("notes").value.trim();
+
+    const items = buildItems();
+    if(!name || !phone){
+      showToast(false, "Please enter your name and phone number.");
+      return;
+    }
+    if(items.length === 0){
+      showToast(false, "Please select at least one item (quantity > 0).");
+      return;
+    }
+    if(deliveryType === "Delivery" && !deliveryLocation){
+      showToast(false, "Please enter a delivery location (or choose Pickup).");
+      return;
+    }
+    if(SCRIPT_URL.includes("PASTE_YOUR_WEB_APP_URL_HERE")){
+      showToast(false, "Admin setup: paste your Apps Script Web App URL into SCRIPT_URL.");
+      return;
+    }
+
+    const subtotal = calcSubtotal();
+    const deliveryFee = calcDeliveryFee();
+    const total = subtotal + deliveryFee;
+
+    const payload = { name, phone, deliveryType, deliveryLocation, notes, items, subtotal, deliveryFee, total };
+
+    const btn = document.getElementById("placeOrderBtn");
+    btn.disabled = true;
+    btn.textContent = "Placing Order…";
+
+    try{
+      const res = await fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+
+      const out = await res.json().catch(() => null);
+
+      if(out && out.status === "success"){
+        showToast(true, "Order received ✅ Thank you!");
+        qtyInputs.forEach(i => i.value = 0);
+        document.getElementById("notes").value = "";
+        document.getElementById("deliveryLocation").value = "";
+        refreshTotals();
+      }else{
+        showToast(false, "Order failed. Please try again.");
+      }
+    }catch(e){
+      showToast(false, "Could not send order. Check internet and try again.");
+    }finally{
+      btn.disabled = false;
+      btn.textContent = "Place Order";
+    }
+  });
+</script>
+</body>
+</html>
