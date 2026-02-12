@@ -15,12 +15,10 @@
       --card: rgba(255,255,255,0.92);
       --text:#231f20;
       --muted:#6b5f65;
-
       --brand:#5b2b82;
       --brand2:#8a4ac6;
       --accent:#c8a24a;
       --accent2:#f3b6c9;
-
       --line: rgba(35,31,32,0.10);
       --shadow: 0 18px 55px rgba(0,0,0,0.12);
       --radius: 26px;
@@ -37,14 +35,13 @@
         radial-gradient(circle at 60% 80%, rgba(91,43,130,0.14) 0 22%, transparent 23%),
         linear-gradient(135deg, #fff0f7, var(--bg));
       padding:22px;
-      overflow-x:hidden;
     }
 
     .wrap{
       width:min(1120px, 100%);
       margin:0 auto;
       display:grid;
-      grid-template-columns: 1.25fr 0.75fr;
+      grid-template-columns: 1.15fr 0.85fr;
       gap:18px;
       align-items:start;
       animation: enter .55s ease forwards;
@@ -79,7 +76,6 @@
       transition: transform .12s ease;
     }
     .back:hover{ transform: translateY(-1px); }
-
     .pill{
       display:inline-flex; gap:8px; align-items:center;
       padding:8px 10px; border-radius:999px;
@@ -126,6 +122,16 @@
     }
     .row:hover{ transform: translateY(-1px); box-shadow: 0 18px 40px rgba(0,0,0,0.06); }
 
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 110px 140px;
+      gap:10px;
+      align-items:center;
+    }
+    @media (max-width: 520px){
+      .grid{grid-template-columns:1fr; gap:8px}
+    }
+
     .itemName{font-weight:700}
     .itemDesc{color:var(--muted); font-size:12.5px; margin-top:2px}
 
@@ -139,62 +145,9 @@
       text-align:center;
       background:white;
     }
-    select, textarea, input[type="text"], input[type="tel"]{
-      width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid var(--line);
-      background:white;
-      font-size:14px;
-      outline:none;
-    }
-    textarea{min-height:90px; resize:vertical}
 
-    .two{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
-    @media (max-width: 650px){ .two{grid-template-columns:1fr;} }
-
-    .cupBlock{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:10px;
-    }
-    .boxGrid{
-      display:grid;
-      grid-template-columns: 1fr 90px 90px 90px;
-      gap:10px;
-      align-items:center;
-      margin-top:8px;
-    }
-    @media (max-width: 560px){
-      .boxGrid{ grid-template-columns: 1fr 1fr; }
-    }
-    .boxHdr{
-      font-size:12px;
-      color:var(--muted);
-      font-weight:700;
-      text-transform:uppercase;
-      letter-spacing:.06em;
-    }
-    .smallPrice{
-      color:var(--muted);
-      font-size:12.5px;
-      text-align:right;
-    }
-
-    .summaryLine{
-      display:flex; justify-content:space-between; align-items:center;
-      padding:10px 0;
-      border-bottom:1px solid rgba(35,31,32,0.06);
-      color:var(--muted);
-      font-size:14px;
-    }
-    .summaryLine strong{color:var(--text)}
-    .total{
-      display:flex; justify-content:space-between; align-items:center;
-      padding:14px 0 0;
-      font-size:16px;
-    }
-    .total strong{font-size:20px; color:var(--text)}
+    .priceLabel{color:var(--muted); font-size:13px; text-align:right;}
+    @media (max-width: 520px){ .priceLabel{text-align:left;} }
 
     .btn{
       width:100%;
@@ -208,21 +161,14 @@
       background: linear-gradient(135deg, var(--brand), var(--accent));
       box-shadow: 0 18px 36px rgba(91,43,130,0.18);
       transition: transform .12s ease, filter .18s ease, box-shadow .18s ease;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
     }
     .btn:hover{ transform: translateY(-1px); filter: brightness(1.03); box-shadow: 0 22px 44px rgba(91,43,130,0.20); }
     .btn:active{ transform: translateY(1px); }
-
-    .toast{
-      display:none;
-      margin-top:12px;
-      padding:12px 12px;
-      border-radius:16px;
-      border:1px solid rgba(0,0,0,0.08);
-      background: rgba(255,255,255,0.92);
-      color:var(--text);
-    }
-    .ok{border-color: rgba(0,160,90,0.22)}
-    .err{border-color: rgba(200,0,60,0.22)}
 
     .cartBox{
       margin-top:12px;
@@ -241,6 +187,21 @@
     }
     .cartLine:last-child{border-bottom:none}
     .cartEmpty{color:var(--muted); font-size:13.5px; padding:6px 0;}
+
+    .summaryLine{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:10px 0;
+      border-bottom:1px solid rgba(35,31,32,0.06);
+      color:var(--muted);
+      font-size:14px;
+    }
+    .summaryLine strong{color:var(--text)}
+    .total{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:14px 0 0;
+      font-size:16px;
+    }
+    .total strong{font-size:20px; color:var(--text)}
   </style>
 </head>
 <body>
@@ -250,213 +211,80 @@
     <div class="card">
       <div class="topnav">
         <a class="back" href="index.html">← Back</a>
-        <div class="pill">Totals update automatically</div>
+        <div class="pill">Choose quantities — totals update automatically</div>
       </div>
 
       <div class="brand">
-        <div class="logo">
-          <img src="logo.png" alt="Zee’s Sweet Treats logo">
-        </div>
+        <div class="logo"><img src="logo.png" alt="Zee’s Sweet Treats logo"></div>
         <div>
           <h1>Zee’s Sweet Treats</h1>
-          <div class="subtitle">Order your treats below ✨</div>
+          <div class="subtitle">Select your treats ✨</div>
         </div>
       </div>
 
       <div class="sectionTitle">Brownies</div>
       <div class="row">
-        <div class="boxGrid" style="grid-template-columns: 1fr 120px 140px;">
+        <div class="grid">
           <div>
             <div class="itemName">Chocolate Brownies</div>
-            <div class="itemDesc">Per piece</div>
+            <div class="itemDesc">Rich & fudgy (per piece)</div>
           </div>
-          <input type="number" min="0" value="0" data-sku="brownies_piece" />
-          <div class="smallPrice" data-price-label="brownies_piece"></div>
+          <input type="number" min="0" value="0" data-sku="brownies" />
+          <div class="priceLabel" data-price-label="brownies"></div>
         </div>
       </div>
 
-      <div class="sectionTitle">Cupcakes (Box Sizes)</div>
+      <div class="sectionTitle">Cupcakes</div>
 
-      <!-- Vanilla -->
-      <div class="row">
-        <div class="cupBlock">
-          <div>
-            <div class="itemName">Vanilla Cupcakes</div>
-            <div class="itemDesc">Select boxes (6 / 12 / 18)</div>
-          </div>
+      <div class="row"><div class="grid">
+        <div><div class="itemName">Vanilla Cupcakes</div><div class="itemDesc">Classic vanilla</div></div>
+        <input type="number" min="0" value="0" data-sku="cup_vanilla" />
+        <div class="priceLabel" data-price-label="cup_vanilla"></div>
+      </div></div>
 
-          <div class="boxGrid">
-            <div class="boxHdr">Boxes</div><div class="boxHdr">6</div><div class="boxHdr">12</div><div class="boxHdr">18</div>
-            <div class="smallPrice">Price</div>
-            <div class="smallPrice" data-price-label="cup_vanilla_6"></div>
-            <div class="smallPrice" data-price-label="cup_vanilla_12"></div>
-            <div class="smallPrice" data-price-label="cup_vanilla_18"></div>
-            <div class="smallPrice">Qty</div>
-            <input type="number" min="0" value="0" data-sku="cup_vanilla_6" />
-            <input type="number" min="0" value="0" data-sku="cup_vanilla_12" />
-            <input type="number" min="0" value="0" data-sku="cup_vanilla_18" />
-          </div>
-        </div>
-      </div>
+      <div class="row"><div class="grid">
+        <div><div class="itemName">Chocolate Cupcakes</div><div class="itemDesc">Deep cocoa</div></div>
+        <input type="number" min="0" value="0" data-sku="cup_chocolate" />
+        <div class="priceLabel" data-price-label="cup_chocolate"></div>
+      </div></div>
 
-      <!-- Chocolate -->
-      <div class="row">
-        <div class="cupBlock">
-          <div>
-            <div class="itemName">Chocolate Cupcakes</div>
-            <div class="itemDesc">Select boxes (6 / 12 / 18)</div>
-          </div>
+      <div class="row"><div class="grid">
+        <div><div class="itemName">Marble Cupcakes</div><div class="itemDesc">Vanilla + chocolate swirl</div></div>
+        <input type="number" min="0" value="0" data-sku="cup_marble" />
+        <div class="priceLabel" data-price-label="cup_marble"></div>
+      </div></div>
 
-          <div class="boxGrid">
-            <div class="boxHdr">Boxes</div><div class="boxHdr">6</div><div class="boxHdr">12</div><div class="boxHdr">18</div>
-            <div class="smallPrice">Price</div>
-            <div class="smallPrice" data-price-label="cup_chocolate_6"></div>
-            <div class="smallPrice" data-price-label="cup_chocolate_12"></div>
-            <div class="smallPrice" data-price-label="cup_chocolate_18"></div>
-            <div class="smallPrice">Qty</div>
-            <input type="number" min="0" value="0" data-sku="cup_chocolate_6" />
-            <input type="number" min="0" value="0" data-sku="cup_chocolate_12" />
-            <input type="number" min="0" value="0" data-sku="cup_chocolate_18" />
-          </div>
-        </div>
-      </div>
+      <div class="row"><div class="grid">
+        <div><div class="itemName">Blueberry Cupcakes</div><div class="itemDesc">Soft & fruity</div></div>
+        <input type="number" min="0" value="0" data-sku="cup_blueberry" />
+        <div class="priceLabel" data-price-label="cup_blueberry"></div>
+      </div></div>
 
-      <!-- Marble -->
-      <div class="row">
-        <div class="cupBlock">
-          <div>
-            <div class="itemName">Marble Cupcakes</div>
-            <div class="itemDesc">Select boxes (6 / 12 / 18)</div>
-          </div>
-
-          <div class="boxGrid">
-            <div class="boxHdr">Boxes</div><div class="boxHdr">6</div><div class="boxHdr">12</div><div class="boxHdr">18</div>
-            <div class="smallPrice">Price</div>
-            <div class="smallPrice" data-price-label="cup_marble_6"></div>
-            <div class="smallPrice" data-price-label="cup_marble_12"></div>
-            <div class="smallPrice" data-price-label="cup_marble_18"></div>
-            <div class="smallPrice">Qty</div>
-            <input type="number" min="0" value="0" data-sku="cup_marble_6" />
-            <input type="number" min="0" value="0" data-sku="cup_marble_12" />
-            <input type="number" min="0" value="0" data-sku="cup_marble_18" />
-          </div>
-        </div>
-      </div>
-
-      <!-- Blueberry -->
-      <div class="row">
-        <div class="cupBlock">
-          <div>
-            <div class="itemName">Blueberry Cupcakes</div>
-            <div class="itemDesc">Select boxes (6 / 12 / 18)</div>
-          </div>
-
-          <div class="boxGrid">
-            <div class="boxHdr">Boxes</div><div class="boxHdr">6</div><div class="boxHdr">12</div><div class="boxHdr">18</div>
-            <div class="smallPrice">Price</div>
-            <div class="smallPrice" data-price-label="cup_blueberry_6"></div>
-            <div class="smallPrice" data-price-label="cup_blueberry_12"></div>
-            <div class="smallPrice" data-price-label="cup_blueberry_18"></div>
-            <div class="smallPrice">Qty</div>
-            <input type="number" min="0" value="0" data-sku="cup_blueberry_6" />
-            <input type="number" min="0" value="0" data-sku="cup_blueberry_12" />
-            <input type="number" min="0" value="0" data-sku="cup_blueberry_18" />
-          </div>
-        </div>
-      </div>
-
-      <!-- Coffee -->
-      <div class="row">
-        <div class="cupBlock">
-          <div>
-            <div class="itemName">Coffee Cupcakes</div>
-            <div class="itemDesc">Select boxes (6 / 12 / 18)</div>
-          </div>
-
-          <div class="boxGrid">
-            <div class="boxHdr">Boxes</div><div class="boxHdr">6</div><div class="boxHdr">12</div><div class="boxHdr">18</div>
-            <div class="smallPrice">Price</div>
-            <div class="smallPrice" data-price-label="cup_coffee_6"></div>
-            <div class="smallPrice" data-price-label="cup_coffee_12"></div>
-            <div class="smallPrice" data-price-label="cup_coffee_18"></div>
-            <div class="smallPrice">Qty</div>
-            <input type="number" min="0" value="0" data-sku="cup_coffee_6" />
-            <input type="number" min="0" value="0" data-sku="cup_coffee_12" />
-            <input type="number" min="0" value="0" data-sku="cup_coffee_18" />
-          </div>
-        </div>
-      </div>
+      <div class="row"><div class="grid">
+        <div><div class="itemName">Coffee Cupcakes</div><div class="itemDesc">Coffee-kissed sweetness</div></div>
+        <input type="number" min="0" value="0" data-sku="cup_coffee" />
+        <div class="priceLabel" data-price-label="cup_coffee"></div>
+      </div></div>
 
       <div class="sectionTitle">Cakes</div>
 
-      <div class="row">
-        <div class="boxGrid" style="grid-template-columns: 1fr 120px 140px;">
-          <div>
-            <div class="itemName">Vanilla Cake</div>
-            <div class="itemDesc">Per cake</div>
-          </div>
-          <input type="number" min="0" value="0" data-sku="cake_vanilla" />
-          <div class="smallPrice" data-price-label="cake_vanilla"></div>
-        </div>
-      </div>
+      <div class="row"><div class="grid">
+        <div><div class="itemName">Vanilla Cake</div><div class="itemDesc">Smooth, classic</div></div>
+        <input type="number" min="0" value="0" data-sku="cake_vanilla" />
+        <div class="priceLabel" data-price-label="cake_vanilla"></div>
+      </div></div>
 
-      <div class="row">
-        <div class="boxGrid" style="grid-template-columns: 1fr 120px 140px;">
-          <div>
-            <div class="itemName">Chocolate Cake</div>
-            <div class="itemDesc">Per cake</div>
-          </div>
-          <input type="number" min="0" value="0" data-sku="cake_chocolate" />
-          <div class="smallPrice" data-price-label="cake_chocolate"></div>
-        </div>
-      </div>
+      <div class="row"><div class="grid">
+        <div><div class="itemName">Chocolate Cake</div><div class="itemDesc">Rich chocolate layers</div></div>
+        <input type="number" min="0" value="0" data-sku="cake_chocolate" />
+        <div class="priceLabel" data-price-label="cake_chocolate"></div>
+      </div></div>
 
-      <div class="row">
-        <div class="boxGrid" style="grid-template-columns: 1fr 120px 140px;">
-          <div>
-            <div class="itemName">Carrot Cake</div>
-            <div class="itemDesc">Per cake</div>
-          </div>
-          <input type="number" min="0" value="0" data-sku="cake_carrot" />
-          <div class="smallPrice" data-price-label="cake_carrot"></div>
-        </div>
-      </div>
-
-      <div class="pill">You can update prices anytime</div>
-    </div>
-
-    <!-- RIGHT: Checkout -->
-    <div class="card">
-      <div class="sectionTitle">Checkout</div>
-
-      <div class="two">
-        <div>
-          <label>Full Name</label>
-          <input id="custName" type="text" placeholder="e.g., Jane Doe" />
-        </div>
-        <div>
-          <label>Phone</label>
-          <input id="custPhone" type="tel" placeholder="e.g., 097xxxxxxx" />
-        </div>
-      </div>
-
-      <div style="margin-top:10px">
-        <label>Delivery Type</label>
-        <select id="deliveryType">
-          <option value="Pickup">Pickup</option>
-          <option value="Delivery">Delivery</option>
-        </select>
-      </div>
-
-      <div style="margin-top:10px">
-        <label>Delivery Location (if Delivery)</label>
-        <input id="deliveryLocation" type="text" placeholder="Area / Address" />
-      </div>
-
-      <div style="margin-top:10px">
-        <label>Notes</label>
-        <textarea id="notes" placeholder="Any special instructions?"></textarea>
-      </div>
+      <div class="row"><div class="grid">
+        <div><div class="itemName">Carrot Cake</div><div class="itemDesc">Spiced, moist, elegant</div></div>
+        <input type="number" min="0" value="0" data-sku="cake_carrot" />
+        <div class="priceLabel" data-price-label="cake_carrot"></div>
+      </div></div>
 
       <div class="cartBox">
         <div class="cartTitle">Your items</div>
@@ -465,58 +293,51 @@
 
       <div style="margin-top:16px">
         <div class="summaryLine"><span>Subtotal</span><strong id="subtotal">K0</strong></div>
-        <div class="summaryLine"><span>Delivery Fee</span><strong id="deliveryFee">K0</strong></div>
+        <div class="summaryLine"><span>Estimated Delivery Fee</span><strong id="deliveryFee">K0</strong></div>
         <div class="total"><span>Total</span><strong id="total">K0</strong></div>
       </div>
 
-      <button class="btn" id="placeOrderBtn">Place Order</button>
-      <div id="toast" class="toast"></div>
+      <a class="btn" id="toCheckout" href="checkout.html">Continue to Checkout →</a>
+    </div>
 
-      <div class="pill" style="margin-top:12px;">We’ll contact you to confirm details</div>
+    <!-- RIGHT: Small info panel -->
+    <div class="card">
+      <div class="sectionTitle">How it works</div>
+      <div class="row" style="margin:0;">
+        <div class="itemName">1) Choose your items</div>
+        <div class="itemDesc">Set quantities (0 means skip). Totals update instantly.</div>
+        <div style="height:10px"></div>
+        <div class="itemName">2) Checkout</div>
+        <div class="itemDesc">Enter your details and choose payment method.</div>
+        <div style="height:10px"></div>
+        <div class="itemName">3) Confirmation</div>
+        <div class="itemDesc">We’ll contact you to confirm the order.</div>
+      </div>
+      <div class="pill" style="margin-top:12px;">Luxury treats, made fresh ✨</div>
     </div>
   </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlyFJEuedE-v-Iyqp6TlIHDBNHkbfrSY-0Co1w9V92a4PEffClOtqPQesutX9csMMk/exec";
-
-  // ✅ EDIT PRICES HERE
+  // Prices (edit anytime)
   const PRICES = {
-    brownies_piece: 25,
-
-    cup_vanilla_6: 72,   cup_vanilla_12: 140,  cup_vanilla_18: 210,
-    cup_chocolate_6: 72, cup_chocolate_12: 140,cup_chocolate_18: 210,
-    cup_marble_6: 72,    cup_marble_12: 140,   cup_marble_18: 210,
-    cup_blueberry_6: 72, cup_blueberry_12: 140,cup_blueberry_18: 210,
-    cup_coffee_6: 72,    cup_coffee_12: 140,   cup_coffee_18: 210,
-
+    brownies: 25,
+    cup_vanilla: 12,
+    cup_chocolate: 12,
+    cup_marble: 12,
+    cup_blueberry: 12,
+    cup_coffee: 12,
     cake_vanilla: 180,
     cake_chocolate: 200,
     cake_carrot: 220
   };
 
   const ITEM_NAMES = {
-    brownies_piece: "Chocolate Brownies (per piece)",
-
-    cup_vanilla_6: "Vanilla Cupcakes (Box of 6)",
-    cup_vanilla_12: "Vanilla Cupcakes (Box of 12)",
-    cup_vanilla_18: "Vanilla Cupcakes (Box of 18)",
-
-    cup_chocolate_6: "Chocolate Cupcakes (Box of 6)",
-    cup_chocolate_12: "Chocolate Cupcakes (Box of 12)",
-    cup_chocolate_18: "Chocolate Cupcakes (Box of 18)",
-
-    cup_marble_6: "Marble Cupcakes (Box of 6)",
-    cup_marble_12: "Marble Cupcakes (Box of 12)",
-    cup_marble_18: "Marble Cupcakes (Box of 18)",
-
-    cup_blueberry_6: "Blueberry Cupcakes (Box of 6)",
-    cup_blueberry_12: "Blueberry Cupcakes (Box of 12)",
-    cup_blueberry_18: "Blueberry Cupcakes (Box of 18)",
-
-    cup_coffee_6: "Coffee Cupcakes (Box of 6)",
-    cup_coffee_12: "Coffee Cupcakes (Box of 12)",
-    cup_coffee_18: "Coffee Cupcakes (Box of 18)",
-
+    brownies: "Chocolate Brownies",
+    cup_vanilla: "Vanilla Cupcakes",
+    cup_chocolate: "Chocolate Cupcakes",
+    cup_marble: "Marble Cupcakes",
+    cup_blueberry: "Blueberry Cupcakes",
+    cup_coffee: "Coffee Cupcakes",
     cake_vanilla: "Vanilla Cake",
     cake_chocolate: "Chocolate Cake",
     cake_carrot: "Carrot Cake"
@@ -524,19 +345,17 @@
 
   const money = (n) => "K" + Number(n || 0).toFixed(0);
 
-  // Show prices
+  // show unit prices
   document.querySelectorAll("[data-price-label]").forEach(el => {
     const sku = el.getAttribute("data-price-label");
-    el.textContent = money(PRICES[sku]);
+    el.textContent = money(PRICES[sku]) + " each";
   });
 
   const qtyInputs = Array.from(document.querySelectorAll('input[type="number"][data-sku]'));
-  const deliveryTypeEl = document.getElementById("deliveryType");
+  const cartList = document.getElementById("cartList");
   const subtotalEl = document.getElementById("subtotal");
   const deliveryFeeEl = document.getElementById("deliveryFee");
   const totalEl = document.getElementById("total");
-  const toast = document.getElementById("toast");
-  const cartList = document.getElementById("cartList");
 
   function safeQty(v){
     const n = parseInt(v, 10);
@@ -550,13 +369,7 @@
       const qty = safeQty(inp.value);
       if(qty > 0){
         const unitPrice = PRICES[sku] || 0;
-        items.push({
-          sku,
-          name: ITEM_NAMES[sku] || sku,
-          qty,
-          unitPrice,
-          lineTotal: qty * unitPrice
-        });
+        items.push({ sku, name: ITEM_NAMES[sku] || sku, qty, unitPrice, lineTotal: qty * unitPrice });
       }
     });
     return items;
@@ -567,12 +380,13 @@
   }
 
   function calcDeliveryFee(){
-    return (deliveryTypeEl.value === "Delivery") ? 25 : 0;
+    // Just an estimate shown on order page. Final delivery fee can be confirmed by Zee.
+    return 0;
   }
 
   function renderCart(items){
     if(items.length === 0){
-      cartList.innerHTML = `<div class="cartEmpty">No items yet — enter quantities to begin.</div>`;
+      cartList.innerHTML = `<div class="cartEmpty">No items yet — enter quantities above.</div>`;
       return;
     }
     cartList.innerHTML = items.map(it => `
@@ -590,72 +404,21 @@
     subtotalEl.textContent = money(sub);
     deliveryFeeEl.textContent = money(del);
     totalEl.textContent = money(sub + del);
+
     renderCart(items);
+
+    // Save cart for checkout
+    const payload = {
+      items,
+      subtotal: sub,
+      deliveryFee: del,
+      total: sub + del
+    };
+    localStorage.setItem("ZEE_ORDER_CART", JSON.stringify(payload));
   }
 
-  // Update totals instantly (mobile friendly)
   qtyInputs.forEach(inp => ["input","change","keyup"].forEach(evt => inp.addEventListener(evt, refreshTotals)));
-  ["input","change"].forEach(evt => deliveryTypeEl.addEventListener(evt, refreshTotals));
   refreshTotals();
-
-  function showToast(ok, msg){
-    toast.style.display = "block";
-    toast.className = "toast " + (ok ? "ok" : "err");
-    toast.textContent = msg;
-  }
-
-  document.getElementById("placeOrderBtn").addEventListener("click", async () => {
-    const name = document.getElementById("custName").value.trim();
-    const phone = document.getElementById("custPhone").value.trim();
-    const deliveryType = deliveryTypeEl.value;
-    const deliveryLocation = document.getElementById("deliveryLocation").value.trim();
-    const notes = document.getElementById("notes").value.trim();
-
-    const items = buildItems();
-    if(!name || !phone){
-      showToast(false, "Please enter your name and phone number.");
-      return;
-    }
-    if(items.length === 0){
-      showToast(false, "Please select at least one item (quantity > 0).");
-      return;
-    }
-    if(deliveryType === "Delivery" && !deliveryLocation){
-      showToast(false, "Please enter a delivery location (or choose Pickup).");
-      return;
-    }
-
-    const subtotal = calcSubtotal(items);
-    const deliveryFee = calcDeliveryFee();
-    const total = subtotal + deliveryFee;
-
-    const payload = { name, phone, deliveryType, deliveryLocation, notes, items, subtotal, deliveryFee, total };
-
-    const btn = document.getElementById("placeOrderBtn");
-    btn.disabled = true;
-    btn.textContent = "Placing Order…";
-
-    try{
-      await fetch(SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payload)
-      });
-
-      showToast(true, "Order received ✅ We’ll contact you to confirm.");
-      qtyInputs.forEach(i => i.value = 0);
-      document.getElementById("notes").value = "";
-      document.getElementById("deliveryLocation").value = "";
-      refreshTotals();
-
-    }catch(e){
-      showToast(false, "Could not send order. Please try again.");
-    }finally{
-      btn.disabled = false;
-      btn.textContent = "Place Order";
-    }
-  });
 </script>
 </body>
 </html>
